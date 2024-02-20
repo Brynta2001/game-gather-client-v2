@@ -34,7 +34,7 @@ const RegisterForm: React.FC = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/auth/signup', {
+            const response = await fetch('http://localhost:3001/auth/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
