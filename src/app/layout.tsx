@@ -20,8 +20,7 @@ export default function RootLayout({
             <div className='gradient' />
         </div>
 
-        <main className='app'>
-            
+        <main className='app'>            
             {children}
         </main>
     
