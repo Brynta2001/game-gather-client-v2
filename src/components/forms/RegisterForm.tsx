@@ -1,6 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import FormTitle from '../others/FormTitle';
+import { useRouter } from 'next/navigation';
+import { axiosInstance } from '@/lib/axios-instance';
 
 interface UserData {
     username: string;
@@ -18,6 +20,8 @@ const RegisterForm: React.FC = () => {
     const [fullName, setFullName] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
+    const router = useRouter();
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const userData: UserData = {
@@ -33,26 +37,34 @@ const RegisterForm: React.FC = () => {
             return;
         }
 
-        try {
-            const response = await fetch('http://localhost:3001/auth/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userData),
-            });
+        // const response = await fetch(backendUrl + '/auth/signup', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(userData),
+        // }).then((res) => {
+        //     console.log(res);
+        //     if (!res.ok) {
+        //         throw new Error('Network response was not ok');
+        //     }
+        //     router.push('/dashboard', { scroll: false })
+        // })
+        // .catch((error) => {
+        //     setErrorMessage('Failed to register');
+        //     console.error('Error:', error);
+        // });
 
-            if (response.status === 201) {
-                //redirect to login page
-                alert('Registered successfully');
-                //window.location.href = '/login';
-            } else {
-                const data = await response.json();
-                setErrorMessage(data.message);
+        await axiosInstance.post('/auth/signup', userData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((res) => {
+            if (res.status !== 201){
+                setErrorMessage(res.data.message);
             }
-        } catch (error) {
-            setErrorMessage('Failed to register');
-        }
+            router.push('/dashboard', { scroll: false })
+        })
     };
 
     return (
