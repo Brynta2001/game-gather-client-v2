@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import FormTitle from '../others/FormTitle';
 
 interface UserData {
     username: string;
@@ -57,11 +58,7 @@ const RegisterForm: React.FC = () => {
     return (
         <div className="flex justify-center items-center">
             <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-                <div>
-                    <h1 className="text-2xl font-bold mb-4 justify-center items-center text-center">
-                        <div>Register</div>
-                    </h1>
-                </div>
+                <FormTitle title="Password Recovery" />
                 {errorMessage && <div className="mb-4 text-red-500">{errorMessage}</div>}
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">

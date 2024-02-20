@@ -1,32 +1,24 @@
-'use client';
+'use client'
 import React, { useState } from 'react';
 import FormTitle from '../others/FormTitle';
 
-
-const LoginForm = () => {
+const PasswordRecoveryForm: React.FC = () => {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-
-    const handleSubmit = async(e: React.FormEvent) => {
-        
-    };
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
     };
 
-    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value);
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // TODO: Add password recovery logic here
+        console.log('Email:', email);
     };
 
     return (
         <div className="flex justify-center items-center">
             <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-                <FormTitle title="Login" />
-                {errorMessage && (
-                    <div className="mb-4 text-red-500">{errorMessage}</div>
-                )}
+                <FormTitle title="Password Recovery" />
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                         Email
@@ -40,25 +32,12 @@ const LoginForm = () => {
                         onChange={handleEmailChange}
                     />
                 </div>
-                <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                        Password
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="password"
-                        type="password"
-                        placeholder="Enter your password"
-                        value={password}
-                        onChange={handlePasswordChange}
-                    />
-                </div>
                 <div className="flex justify-center items-center">
                     <button
                         className="primary-color hover:bg-orange-700 text-gray-100 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         type="submit"
                     >
-                        Login
+                        Recover Password
                     </button>
                 </div>
             </form>
@@ -66,4 +45,6 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;
+
+
+export default PasswordRecoveryForm;
