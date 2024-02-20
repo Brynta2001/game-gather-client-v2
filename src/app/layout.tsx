@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AppBar from "@/components/AppBar";
+import Provider from "@/components/Provider";
 
 
 export const metadata: Metadata = {
@@ -15,15 +17,15 @@ export default function RootLayout({
   return (
     <html lang='en'>
     <body>
-    
+      <Provider>
+        <AppBar />
         <div className='main'>
-            <div className='gradient' />
+          <div className='gradient' />
         </div>
-
         <main className='app'>            
             {children}
         </main>
-    
+      </Provider>
     </body>
 </html>
   );
