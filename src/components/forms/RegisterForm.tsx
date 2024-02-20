@@ -45,7 +45,7 @@ const RegisterForm: React.FC = () => {
             if (response.status === 201) {
                 //redirect to login page
                 alert('Registered successfully');
-                window.location.href = '/login';
+                //window.location.href = '/login';
             } else {
                 const data = await response.json();
                 setErrorMessage(data.message);
