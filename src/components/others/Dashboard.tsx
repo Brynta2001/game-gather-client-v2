@@ -4,47 +4,43 @@ import GameCard from '@/components/games/GameCard';
 import React, { useState, useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import { axiosInstance } from '@/lib/axios-instance';
+import { AxiosError, AxiosResponse } from 'axios';
 
 const Dashboard: React.FC = () => {
     const [games, setGames] = useState([]);
     const { data: session } = useSession();
 
     useEffect(() => {
-        const fetchGames = async () => {        
-            if (session && session.user.token){
+        const fetchGames = async () => {
+            if (session && session.user.token) {
                 const token = session.user.token
-                const config = {
-                    headers: { Authorization: 'Bearer ${token}' }
-                };
-                    try {
-                        await axiosInstance.post('/games',null,config)
-                        .catch((error) => {
-                            console.log(error);
-                        })
-                        .then((response) => {
-                            alert(response);
-                        });
-                        
-                    } catch (error) {
-                        console.error('Error fetching games:', error);
-                    }
-                }
+                console.log(`Bearer ${token}`)
+                await axiosInstance.get('/games',{
+                    headers: {
+                        'accept': 'application/json', 
+                        'Authorization': `Bearer ${token}` }
+                }).then((response: AxiosResponse) => {
+                    setGames(response.data);
+                }).catch((error: any) => {
+                    console.log(error);
+                });
+            }
         };
-        if (session?.user.id) fetchGames();
-    }, [session?.user.token]);
+        if (session?.user.token) fetchGames();
+    }, [session]);
 
-   
+
 
     return (
-        <div>
-            {games.map((game:any) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
+            {games.map((game: any) => (
                 <GameCard
                     key={game.id}
                     id={game.id}
                     title={game.title}
                     publisher={game.publisher}
                     releaseYear={game.releaseYear}
-                    genres={game.genres}
+                    genres={game.genre} // Use "genre" instead of "genres"
                     platforms={game.platforms}
                     image={game.image}
                 />

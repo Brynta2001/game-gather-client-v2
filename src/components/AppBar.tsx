@@ -4,7 +4,7 @@ import { SignInButton } from "./buttons/SignInButton";
 
 const AppBar = () => {
   return (
-    <header className='flex-between w-full mb-16 pt-3 px-8'>
+    <header className='flex-between w-full pt-3 px-8 shadow-md pb-9'>
         <Link href='/' className='flex gap-2 flex-center'>
         <Image
           src='/assets/images/logo.svg'
