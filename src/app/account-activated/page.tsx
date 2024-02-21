@@ -15,10 +15,8 @@ const Page: React.FC = () => {
         const activateAccount = async () => {             
             if (searchParams) {
                 const id = searchParams.get('id')
-                const code = searchParams.get('code')
-                
+                const code = searchParams.get('code')                
                 const activationData = { id, code }
-
                 try {           
                     await axiosInstance.post('/auth/activate-account', activationData)
                     .then(response => {                    
