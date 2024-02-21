@@ -5,8 +5,6 @@ import { axiosInstance } from '@/lib/axios-instance';
 import { useSearchParams } from 'next/navigation'
 import ErrorMessage from '@/components/others/ErrorMessage';
 
-
-
 const Page: React.FC = () => {
     const searchParams = useSearchParams()
     const [activated, setActivated] = useState(false);
