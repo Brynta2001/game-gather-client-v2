@@ -2,24 +2,46 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { useRouter } from 'next/navigation';
+import { axiosInstance } from '@/lib/axios-instance';
+import { signIn, useSession } from 'next-auth/react';
 
 const ResetComponent = () => {
+    const { data: session } = useSession();
+
     const initialValues = {
-        newPassword: '',
-        confirmPassword: '',
+        password: '',
+        passwordConfirmation: '',
     };
 
     const validationSchema = Yup.object({
-        newPassword: Yup.string()
-            .required('New password is required')
-            .min(6, 'Password must be at least 6 characters long'),
-        confirmPassword: Yup.string()
-            .required('Confirm password is required')
-            .oneOf([Yup.ref('newPassword')], 'Passwords must match'),
+        password: Yup.string()
+            .required('Password is required')
+            .min(10, 'Password must be 10 characters long')
+            .matches(/[0-9]/, 'Password requires a number')
+            .matches(/[a-z]/, 'Password requires a lowercase letter')
+            .matches(/[A-Z]/, 'Password requires an uppercase letter')
+            .matches(/[^\w]/, 'Password requires a symbol'),
+        passwordConfirmation: Yup.string()
+            .oneOf([Yup.ref('password')], 'Passwords must match')
+            .required('Confirm Password is required'),
     });
+    const router = useRouter();
 
-    const handleSubmit = (values: any) => {
-        // Handle form submission
+    const handleSubmit = async(values: any) => {
+        if (session && session.token){
+            try {
+                await axiosInstance.post('/auth/signup', { ...values, token: session.token }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });                
+                router.push('/dashboard', { scroll: false });
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        
     };
 
     return (
@@ -36,35 +58,35 @@ const ResetComponent = () => {
                         </h1>
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="newPassword" className="text-gray-700">
+                        <label htmlFor="password" className="text-gray-700">
                             Enter your new password
                         </label>
                         <Field
                             type="password"
-                            id="newPassword"
-                            name="newPassword"
+                            id="password"
+                            name="password"
                             placeholder="New Password"
                             className="border border-gray-300 rounded-md px-4 py-2 mb-2"
                         />
                         <ErrorMessage
-                            name="newPassword"
+                            name="password"
                             component="div"
                             className="text-red-500"
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="confirmPassword" className="text-gray-700">
+                        <label htmlFor="passwordConfirmation" className="text-gray-700">
                             Confirm password
                         </label>
                         <Field
                             type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
+                            id="passwordConfirmation"
+                            name="passwordConfirmation"
                             placeholder="Confirm Password"
                             className="border border-gray-300 rounded-md px-4 py-2 mb-2"
                         />
                         <ErrorMessage
-                            name="confirmPassword"
+                            name="passwordConfirmation"
                             component="div"
                             className="text-red-500"
                         />

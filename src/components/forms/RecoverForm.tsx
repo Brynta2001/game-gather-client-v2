@@ -3,6 +3,12 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import FormTitle from '../others/FormTitle';
+import { axiosInstance } from '@/lib/axios-instance';
+
+interface EmailData {    
+    email: string;    
+}
+
 
 const PasswordRecoveryForm: React.FC = () => {
     const initialValues = {
@@ -10,12 +16,20 @@ const PasswordRecoveryForm: React.FC = () => {
     };
 
     const validationSchema = Yup.object({
-        email: Yup.string().email('Invalid email address').required('Email is required'),
+        email: Yup.string().email('Invalid email address').required('Email is required').max(50, 'Email is too long')
     });
 
-    const handleSubmit = (values: any) => {
-        // TODO: Add password recovery logic here
-        console.log('Email:', values.email);
+    const handleSubmit = async (emailData: EmailData) => {        
+        
+        try {
+            await axiosInstance.post('/password-reset/forgot-password', emailData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });            
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (

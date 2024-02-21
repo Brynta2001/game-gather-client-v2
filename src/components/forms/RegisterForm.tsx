@@ -1,151 +1,141 @@
-'use client';
-import React, { useState } from 'react';
+'use client'
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import FormTitle from '../others/FormTitle';
 import { useRouter } from 'next/navigation';
 import { axiosInstance } from '@/lib/axios-instance';
 
-interface UserData {
-    username: string;
-    email: string;
-    password: string;
-    fullName: string;
-    role: string;
-}
 
 const RegisterForm: React.FC = () => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [fullName, setFullName] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-
     const router = useRouter();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const userData: UserData = {
-            username: username,
-            email: email,
-            password: password,
-            fullName: fullName,
-            role: "user"
-        };
+    const initialValues = {
+        username: '',
+        email: '',
+        password: '',
+        fullName: '',
+        role: 'user',        
+    };
 
-        if (password !== confirmPassword) {
-            setErrorMessage('Passwords do not match');
-            return;
+    const validationSchema = Yup.object({
+        username: Yup.string().required('Username is required').max(50, 'Username is too long'),
+        email: Yup.string().email('Invalid email address').required('Email is required').max(50, 'Email is too long'),
+        password: Yup.string().required('Password is required')
+        .min(10, 'Password must be 10 characters long')
+        .matches(/[0-9]/, 'Password requires a number')
+        .matches(/[a-z]/, 'Password requires a lowercase letter')
+        .matches(/[A-Z]/, 'Password requires an uppercase letter')
+        .matches(/[^\w]/, 'Password requires a symbol').max(50, 'Password is too long'),
+
+        confirmPassword: Yup.string()
+            .oneOf([Yup.ref('password')], 'Passwords must match')
+            .required('Confirm Password is required'),
+        fullName: Yup.string().required('Full Name is required').max(50, 'Full Name is too long'),
+    });
+
+    const handleSubmit = async (userData: any) => {
+        const { confirmPassword, ...userDataToSent} = userData
+        
+        try {
+            await axiosInstance.post('/auth/signup', userDataToSent, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).catch((error) => {
+                alert(error.response.data.message);            
+            });            
+            
+        } catch (error) {
+            console.error(error);
         }
-
-        // const response = await fetch(backendUrl + '/auth/signup', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(userData),
-        // }).then((res) => {
-        //     console.log(res);
-        //     if (!res.ok) {
-        //         throw new Error('Network response was not ok');
-        //     }
-        //     router.push('/dashboard', { scroll: false })
-        // })
-        // .catch((error) => {
-        //     setErrorMessage('Failed to register');
-        //     console.error('Error:', error);
-        // });
-
-        await axiosInstance.post('/auth/signup', userData, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then((res) => {
-            if (res.status !== 201){
-                setErrorMessage(res.data.message);
-            }
-            router.push('/dashboard', { scroll: false })
-        })
     };
 
     return (
         <div className="flex justify-center items-center">
-            <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-                <FormTitle title="Password Recovery" />
-                {errorMessage && <div className="mb-4 text-red-500">{errorMessage}</div>}
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-                        Username
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="username"
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                        Email
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="email"
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                        Password
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="password"
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
-                        Confirm Password
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="confirmPassword"
-                        type="password"
-                        placeholder="Confirm Password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                </div>
-                <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullName">
-                        Full Name
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="fullName"
-                        type="text"
-                        placeholder="Full Name"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                    />
-                </div>
-                <div className="flex items-center justify-between text-center">
-                    <button
-                        className="primary-color hover:bg-orange-700 text-gray-100 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="submit"
-                    >
-                        Register
-                    </button>
-                </div>
-            </form>
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+            >
+                <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <FormTitle title="Password Recovery" />
+                    <ErrorMessage name="errorMessage" component="div" className="mb-4 text-red-500" />
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+                            Username
+                        </label>
+                        <Field
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="username"
+                            type="text"
+                            name="username"
+                            placeholder="Username"
+                        />
+                        <ErrorMessage name="username" component="div" className="text-red-500" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                            Email
+                        </label>
+                        <Field
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="email"
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                        />
+                        <ErrorMessage name="email" component="div" className="text-red-500" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+                            Password
+                        </label>
+                        <Field
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                        />
+                        <ErrorMessage name="password" component="div" className="text-red-500" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
+                            Confirm Password
+                        </label>
+                        <Field
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="confirmPassword"
+                            type="password"
+                            name="confirmPassword"
+                            placeholder="Confirm Password"
+                        />
+                        <ErrorMessage name="confirmPassword" component="div" className="text-red-500" />
+                    </div>
+                    <div className="mb-6">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullName">
+                            Full Name
+                        </label>
+                        <Field
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="fullName"
+                            type="text"
+                            name="fullName"
+                            placeholder="Full Name"
+                        />
+                        <ErrorMessage name="fullName" component="div" className="text-red-500" />
+                    </div>
+                    <div className="flex items-center justify-between text-center">
+                        <button
+                            className="primary-color hover:bg-orange-700 text-gray-100 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="submit"
+                        >
+                            Register
+                        </button>
+                    </div>
+                </Form>
+            </Formik>
         </div>
     );
 };
