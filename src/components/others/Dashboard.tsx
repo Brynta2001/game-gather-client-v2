@@ -1,20 +1,53 @@
+'use client'
 import GameCard from '@/components/games/GameCard';
 
-const Dashboard: React.FC = () => {   
+import React, { useState, useEffect } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { axiosInstance } from '@/lib/axios-instance';
+
+const Dashboard: React.FC = () => {
+    const [games, setGames] = useState([]);
+    const { data: session } = useSession();
+
+    useEffect(() => {
+        fetchGames();
+    }, []);
+
+    const fetchGames = async () => {
+        alert(session);
+        if (session && session.user.token){
+            const token = session.user.token
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            };
+                try {
+                    await axiosInstance.post('/api/games',null,config)
+                    .catch((error) => {})
+                    .then((response) => {
+                        alert(response);
+                    });
+                    
+                } catch (error) {
+                    console.error('Error fetching games:', error);
+                }
+            }
+    };
 
     return (
-        
-        <GameCard
-            key={1}
-            id="1"
-            title="The Legend of Zelda: Breath of the Wild"
-            publisher="Nintendo"
-            releaseYear={2017}
-            genres={["Action", "Adventure"]}
-            platforms={["Nintendo Switch", "Wii U"]}
-            image="https://assets-prd.ignimgs.com/2022/06/14/zelda-breath-of-the-wild-1655249167687.jpg"
-        />       
-
+        <div>
+            {games.map((game:any) => (
+                <GameCard
+                    key={game.id}
+                    id={game.id}
+                    title={game.title}
+                    publisher={game.publisher}
+                    releaseYear={game.releaseYear}
+                    genres={game.genres}
+                    platforms={game.platforms}
+                    image={game.image}
+                />
+            ))}
+        </div>
     );
 };
 

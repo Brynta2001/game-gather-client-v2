@@ -1,10 +1,10 @@
 import React from 'react';
-import VerificationEmailSent from '@/components/others/VerificationSend';
+import ResetPasswordForm from '@/components/forms/ResetPasswordFrom';
 
 const Page: React.FC = () => {
     return (
         <div>
-            <VerificationEmailSent />
+            <ResetPasswordForm />
         </div>
     );
 };

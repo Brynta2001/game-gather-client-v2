@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { axiosInstance } from '@/lib/axios-instance';
 import { signIn, useSession } from 'next-auth/react';
 
-const ResetComponent = () => {
+const ResetPasswordForm: React.FC = () =>  {
     const { data: session } = useSession();
 
     const initialValues = {
@@ -30,6 +30,7 @@ const ResetComponent = () => {
 
     const handleSubmit = async(values: any) => {
         if (session && session.user.token){
+            alert('token: ' + session.user.token);
             try {
                 await axiosInstance.post('/auth/signup', { ...values, token: session.user.token }, {
                     headers: {
@@ -105,4 +106,4 @@ const ResetComponent = () => {
     );
 };
 
-export default ResetComponent;
+export default ResetPasswordForm;
