@@ -10,28 +10,30 @@ const Dashboard: React.FC = () => {
     const { data: session } = useSession();
 
     useEffect(() => {
-        fetchGames();
-    }, []);
-
-    const fetchGames = async () => {
-        
-        if (session && session.user.token){
-            const token = session.user.token
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
-                try {
-                    await axiosInstance.post('/api/games',null,config)
-                    .catch((error) => {})
-                    .then((response) => {
-                        alert(response);
-                    });
-                    
-                } catch (error) {
-                    console.error('Error fetching games:', error);
+        const fetchGames = async () => {        
+            if (session && session.user.token){
+                const token = session.user.token
+                const config = {
+                    headers: { Authorization: 'Bearer ${token}' }
+                };
+                    try {
+                        await axiosInstance.post('/api/games',null,config)
+                        .catch((error) => {
+                            console.log(error);
+                        })
+                        .then((response) => {
+                            alert(response);
+                        });
+                        
+                    } catch (error) {
+                        console.error('Error fetching games:', error);
+                    }
                 }
-            }
-    };
+        };
+        if (session?.user.id) fetchGames();
+    }, [session?.user.token]);
+
+   
 
     return (
         <div>
