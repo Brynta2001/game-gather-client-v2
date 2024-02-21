@@ -29,9 +29,9 @@ const ResetComponent = () => {
     const router = useRouter();
 
     const handleSubmit = async(values: any) => {
-        if (session && session.token){
+        if (session && session.user.token){
             try {
-                await axiosInstance.post('/auth/signup', { ...values, token: session.token }, {
+                await axiosInstance.post('/auth/signup', { ...values, token: session.user.token }, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
