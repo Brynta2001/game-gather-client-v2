@@ -44,6 +44,8 @@ const RegisterForm: React.FC = () => {
                 },
             }).catch((error) => {
                 alert(error.response.data.message);            
+            }).then((response) => {                
+                router.push('/success');
             });            
             
         } catch (error) {

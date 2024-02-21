@@ -17,7 +17,7 @@ const Dashboard: React.FC = () => {
                     headers: { Authorization: 'Bearer ${token}' }
                 };
                     try {
-                        await axiosInstance.post('/api/games',null,config)
+                        await axiosInstance.post('/games',null,config)
                         .catch((error) => {
                             console.log(error);
                         })
