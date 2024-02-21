@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect,useState } from 'react';
+import React, { Suspense, useEffect,useState } from 'react';
 import AccountActivated from '@/components/others/AccountActivated';
 import { axiosInstance } from '@/lib/axios-instance';
 import { useSearchParams } from 'next/navigation'
@@ -34,9 +34,11 @@ const Page: React.FC = () => {
     }, [searchParams]);
 
     return (
-        <div>
-            {activated ? <AccountActivated /> : <ErrorMessage text='Something went wrong. Please wait or try again later.'/>}
-        </div>
+        <Suspense>
+            <div>
+                {activated ? <AccountActivated /> : <ErrorMessage text='Something went wrong. Please wait or try again later.'/>}
+            </div>
+        </Suspense>
     );
 };
 
