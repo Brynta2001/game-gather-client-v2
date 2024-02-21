@@ -16,14 +16,6 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        // const res = await fetch(backendUrl + "/auth/login", {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify({
-        //         email: credentials?.email,
-        //         password: credentials?.password
-        //     }),
-        // });
 
         const res = await axiosInstance.post("/auth/login", {
             email: credentials?.email,
