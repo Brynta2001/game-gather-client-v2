@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import FormTitle from '../others/FormTitle';
 import { useRouter } from 'next/navigation';
 import { axiosInstance } from '@/lib/axios-instance';
+import { AxiosError, AxiosResponse } from 'axios';
 
 
 const RegisterForm: React.FC = () => {
@@ -38,15 +39,32 @@ const RegisterForm: React.FC = () => {
         const { confirmPassword, ...userDataToSent} = userData
         
         try {
-            await axiosInstance.post('/auth/signup', userDataToSent, {
+            const response=await axiosInstance.post('/auth/signup', userDataToSent, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             }).catch((error) => {
-                alert(error.response.data.message);            
-            }).then((response) => {                
-                router.push('/success');
-            });            
+                
+            }).then((response:any) => {                               
+                //router.push('/success');
+                if (response.status === 201) {
+                    router.push('/success');
+                }else{
+                    if (response.data.message.includes('already exists')) {
+                        let errorMessage = '';
+                        if (response.data.message.includes('Key (username)')) {
+                            errorMessage = 'Username already exists';
+                        } else if (response.data.message.includes('Key (email)')) {
+                            errorMessage = 'Email already exists';
+                        }
+                        alert(errorMessage);
+                    } else {
+                        alert(response.data.message);
+                    }
+                }
+            }); 
+            
+            
             
         } catch (error) {
             console.error(error);
@@ -61,7 +79,7 @@ const RegisterForm: React.FC = () => {
                 onSubmit={handleSubmit}
             >
                 <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                    <FormTitle title="Password Recovery" />
+                    <FormTitle title="Sign Up" />
                     <ErrorMessage name="errorMessage" component="div" className="mb-4 text-red-500" />
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
