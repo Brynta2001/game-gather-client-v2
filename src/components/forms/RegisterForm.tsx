@@ -37,38 +37,26 @@ const RegisterForm: React.FC = () => {
 
     const handleSubmit = async (userData: any) => {
         const { confirmPassword, ...userDataToSent} = userData
-        
-        try {
-            const response=await axiosInstance.post('/auth/signup', userDataToSent, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }).catch((error) => {
-                
-            }).then((response:any) => {                               
-                //router.push('/success');
-                if (response.status === 201) {
-                    router.push('/success');
-                }else{
-                    if (response.data.message.includes('already exists')) {
-                        let errorMessage = '';
-                        if (response.data.message.includes('Key (username)')) {
-                            errorMessage = 'Username already exists';
-                        } else if (response.data.message.includes('Key (email)')) {
-                            errorMessage = 'Email already exists';
-                        }
-                        alert(errorMessage);
-                    } else {
-                        alert(response.data.message);
-                    }
-                }
-            }); 
-            
-            
-            
-        } catch (error) {
-            console.error(error);
-        }
+
+        const response = await axiosInstance.post('/auth/signup', userDataToSent, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((response: AxiosResponse) => {
+            if (response.status === 201) {
+                router.push('/success');
+            }
+        }).catch((error: any) => {
+            let errorMessage = '';
+            const errorData = error.response.data;
+            if (errorData.message.includes('Key (username)')) {
+                errorMessage = 'Username already exists';
+            } else if (errorData.message.includes('Key (email)')) {
+                errorMessage = 'Email already exists';
+            }
+            console.log(errorMessage);
+            alert(errorMessage);
+        });
     };
 
     return (
