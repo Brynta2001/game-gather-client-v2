@@ -36,7 +36,7 @@ const ResetPasswordForm: React.FC = () =>  {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                });                
+                }).catch((error) => {} );                
                 router.push('/dashboard', { scroll: false });
             } catch (error) {
                 console.error(error);

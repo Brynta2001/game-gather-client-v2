@@ -14,7 +14,7 @@ const Dashboard: React.FC = () => {
     }, []);
 
     const fetchGames = async () => {
-        alert(session);
+        
         if (session && session.user.token){
             const token = session.user.token
             const config = {

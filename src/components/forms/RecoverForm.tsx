@@ -26,7 +26,7 @@ const PasswordRecoveryForm: React.FC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });            
+            }).catch((error) => {} );            
         } catch (error) {
             console.error(error);
         }
