@@ -1,3 +1,4 @@
+import { axiosInstance } from "@/lib/axios-instance";
 import { backendUrl } from "@/lib/constants";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
@@ -15,23 +16,32 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const res = await fetch(backendUrl + "/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                email: credentials?.email,
-                password: credentials?.password
-            }),
-        });
+        // const res = await fetch(backendUrl + "/auth/login", {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //     body: JSON.stringify({
+        //         email: credentials?.email,
+        //         password: credentials?.password
+        //     }),
+        // });
 
-        const user = res.json();
-  
-        if (user) {
-          return user
-        } else {
-          return null
-        }
+        const res = await axiosInstance.post("/auth/login", {
+            email: credentials?.email,
+            password: credentials?.password,
+        }, 
+          {
+            headers: {
+              "Content-Type": "application/json"
+            }
+        });
         
+        const user = await res.data;
+        
+        if (user.error){
+          console.log(user.error)
+          throw new Error(user.error)
+        }
+        return user;
       }
     }),
   ],
