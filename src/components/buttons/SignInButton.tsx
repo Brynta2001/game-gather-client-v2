@@ -9,8 +9,9 @@ export const SignInButton = () => {
 
   if (session && session.user){
     return (
-      <div>
+      <div className='flex gap-3 md:gap-5'>
         <p>{session.user.fullName}</p>
+        <Link href={'/dashboard'} className='black_btn'>Games</Link>
         <button className='outline_btn' onClick={ () => signOut() }>Sign Out</button>
       </div>
     )

@@ -1,3 +1,8 @@
+/**
+ * Component for verifying account activation.
+ * @returns React component
+ */
+
 'use client'
 import React, { Suspense, useEffect, useState } from 'react';
 import AccountActivated from '@/components/others/AccountActivated';
@@ -11,6 +16,8 @@ const VerifyActivation: React.FC = () => {
 
     
     useEffect(() => {
+        
+        //Function to activate the user's account.         
         const activateAccount = async () => {
             if (searchParams) {
                 const id = searchParams.get('id')
