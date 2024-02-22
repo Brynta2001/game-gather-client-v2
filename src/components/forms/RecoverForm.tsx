@@ -8,8 +8,7 @@ import { axiosInstance } from '@/lib/axios-instance';
 interface EmailData {    
     email: string;    
 }
-
-
+//Password recovery form component
 const PasswordRecoveryForm: React.FC = () => {
 
     const [buttonState, setButtonState] = React.useState(false);
@@ -17,11 +16,11 @@ const PasswordRecoveryForm: React.FC = () => {
     const initialValues = {
         email: '',
     };
-
+    //Validation schema for the password recovery form
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email address').required('Email is required').max(50, 'Email is too long')
     });
-
+    //Function to handle the password recovery form submission
     const handleSubmit = async (emailData: EmailData) => {        
         
         try {

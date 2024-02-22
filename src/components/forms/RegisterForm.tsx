@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { axiosInstance } from '@/lib/axios-instance';
 import { AxiosResponse } from 'axios';
 
-
+//Registration form component
 const RegisterForm: React.FC = () => {
     const router = useRouter();
 
@@ -18,7 +18,7 @@ const RegisterForm: React.FC = () => {
         fullName: '',
         role: 'user',        
     };
-
+    //Validation schema for the registration form
     const validationSchema = Yup.object({
         username: Yup.string().required('Username is required').max(50, 'Username is too long'),
         email: Yup.string().email('Invalid email address').required('Email is required').max(50, 'Email is too long'),
@@ -34,7 +34,7 @@ const RegisterForm: React.FC = () => {
             .required('Confirm Password is required'),
         fullName: Yup.string().required('Full Name is required').max(50, 'Full Name is too long'),
     });
-
+    //Function to handle the registration form submission
     const handleSubmit = async (userData: any) => {
         const { confirmPassword, ...userDataToSent} = userData
 

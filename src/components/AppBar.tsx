@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { SignInButton } from "./buttons/SignInButton";
 
+// AppBar component 
 const AppBar = () => {
   return (
     <header className='flex-between w-full pt-3 px-8 shadow-md pb-9'>

@@ -5,11 +5,11 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { axiosInstance } from '@/lib/axios-instance';
 import { AxiosResponse } from 'axios';
-
+// Dashboard component
 const Dashboard: React.FC = () => {
     const [games, setGames] = useState([]);
     const { data: session } = useSession();
-
+    // Fetch games from the API using Bearer token
     useEffect(() => {
         const fetchGames = async () => {
             if (session && session.user.token) {

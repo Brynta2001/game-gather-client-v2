@@ -6,7 +6,9 @@ const Page: React.FC = () => {
     
     return (
         <div>
+            {/* Suspense component used for lazy loading */}
             <Suspense fallback={<ErrorMessage text='Something went wrong. Please wait or try again later.' />}>
+                {/* ResetPasswordForm component for resetting password */}
                 <ResetPasswordForm />
             </Suspense>
         </div>

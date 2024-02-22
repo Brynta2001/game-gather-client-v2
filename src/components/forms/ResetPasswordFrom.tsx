@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation'
 import { axiosInstance } from '@/lib/axios-instance';
 
-
+//Reset password form component
 const ResetPasswordForm: React.FC = () =>  {
     
     const searchParams = useSearchParams()

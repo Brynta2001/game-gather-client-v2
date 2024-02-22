@@ -8,6 +8,8 @@ import Link from "next/link";
 import Image from "next/image";
 import FormTitle from "@/components/others/FormTitle";
 
+// Defining a personalization for the sign in page
+// uses csrfToken to protect against CSRF attacks
 export default function SignIn({
     csrfToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -67,6 +69,7 @@ export default function SignIn({
     )
 }
 
+// getServerSideProps function to get the csrfToken
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
         props: {

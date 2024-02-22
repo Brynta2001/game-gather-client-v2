@@ -3,12 +3,13 @@ import "./globals.css";
 import AppBar from "@/components/AppBar";
 import Provider from "@/components/Provider";
 
-
+// Defining the metadata for the layout
 export const metadata: Metadata = {
   title: "Game Gather",
   description: "Review and Discover games",
 };
 
+// Defining the RootLayout component
 export default function RootLayout({
   children,
 }: Readonly<{
