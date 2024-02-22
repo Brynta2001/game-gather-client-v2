@@ -5,9 +5,7 @@ import ErrorMessage from '@/components/others/ErrorMessage';
 import VerifyActivation from '@/components/others/VerifyActivation';
 
 const Page: React.FC = () => {
-    const searchParams = useSearchParams()
-    const [activated, setActivated] = useState(false);      
-    
+       
 
     return (
         <Suspense fallback={<ErrorMessage text='Something went wrong. Please wait or try again later.' />}>
