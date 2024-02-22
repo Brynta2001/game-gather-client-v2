@@ -32,8 +32,7 @@ const VerifyActivation: React.FC = () => {
 
     }, [searchParams]);
 
-    return (
-        
+    return (        
             <div>
                 {activated ? <AccountActivated /> : <ErrorMessage text='Something went wrong. Please wait or try again later.' />}
             </div>

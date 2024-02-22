@@ -2,9 +2,9 @@
 import GameCard from '@/components/games/GameCard';
 
 import React, { useState, useEffect } from 'react';
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { axiosInstance } from '@/lib/axios-instance';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 
 const Dashboard: React.FC = () => {
     const [games, setGames] = useState([]);

@@ -1,5 +1,4 @@
 import { axiosInstance } from "@/lib/axios-instance";
-import { backendUrl } from "@/lib/constants";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";

@@ -1,6 +1,5 @@
 'use client'
-import React, { Suspense, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation'
+import React, { Suspense} from 'react';
 import ErrorMessage from '@/components/others/ErrorMessage';
 import VerifyActivation from '@/components/others/VerifyActivation';
 

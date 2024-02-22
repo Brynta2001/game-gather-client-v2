@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import FormTitle from '../others/FormTitle';
 import { useRouter } from 'next/navigation';
 import { axiosInstance } from '@/lib/axios-instance';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 
 
 const RegisterForm: React.FC = () => {
