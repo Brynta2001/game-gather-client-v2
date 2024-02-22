@@ -32,8 +32,8 @@ const ResetPasswordForm: React.FC = () =>  {
     const handleSubmit = async(values: any) => {
         if (searchParams) {
             const token = searchParams.get('token')                          
-            const resetData = { token,values }
-                     
+            const resetData = { token,...values }
+           
                 await axiosInstance.post('/password-reset/reset-password', resetData)
                 .then(response => {                    
                     if (response.status === 201) {
@@ -43,6 +43,7 @@ const ResetPasswordForm: React.FC = () =>  {
                 })
                 .catch(error => {                    
                     console.log(error);
+                    alert('Password reset failed, try again later');
                 });
             
         }
