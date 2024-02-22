@@ -29,6 +29,10 @@ const ResetPasswordForm: React.FC = () =>  {
     });
     const router = useRouter();
 
+    if(!searchParams) {
+        router.push('/');       
+    }
+
     const handleSubmit = async(values: any) => {
         if (searchParams) {
             const token = searchParams.get('token')                          
