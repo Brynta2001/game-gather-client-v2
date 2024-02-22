@@ -3,12 +3,13 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation'
 import { axiosInstance } from '@/lib/axios-instance';
-import { signIn, useSession } from 'next-auth/react';
+
 
 const ResetPasswordForm: React.FC = () =>  {
-    const { data: session } = useSession();
-
+    
+    const searchParams = useSearchParams()
     const initialValues = {
         password: '',
         passwordConfirmation: '',
@@ -29,18 +30,21 @@ const ResetPasswordForm: React.FC = () =>  {
     const router = useRouter();
 
     const handleSubmit = async(values: any) => {
-        if (session && session.user.token){
-            alert('token: ' + session.user.token);
-            try {
-                await axiosInstance.post('/auth/signup', { ...values, token: session.user.token }, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }).catch((error) => {} );                
-                router.push('/dashboard', { scroll: false });
-            } catch (error) {
-                console.error(error);
-            }
+        if (searchParams) {
+            const token = searchParams.get('token')                          
+            const resetData = { token,values }
+                     
+                await axiosInstance.post('/password-reset/reset-password', resetData)
+                .then(response => {                    
+                    if (response.status === 201) {
+                        alert('Password reset successful');
+                        router.push('/');
+                    }                    
+                })
+                .catch(error => {                    
+                    console.log(error);
+                });
+            
         }
         
     };

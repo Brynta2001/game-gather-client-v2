@@ -15,7 +15,7 @@ const Page: React.FC = () => {
                 const id = searchParams.get('id')
                 const code = searchParams.get('code')                
                 const activationData = { id, code }
-                try {           
+                          
                     await axiosInstance.post('/auth/activate-account', activationData)
                     .then(response => {                    
                         console.log(response.data);
@@ -24,9 +24,7 @@ const Page: React.FC = () => {
                     .catch(error => {                    
                         console.error(error.response.data.message);
                     });
-                } catch (error) {
-                    console.error(error);
-                }
+                
             }
         }   
         if (searchParams) activateAccount();
