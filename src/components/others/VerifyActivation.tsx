@@ -10,6 +10,7 @@ import { axiosInstance } from '@/lib/axios-instance';
 import { useSearchParams } from 'next/navigation'
 import ErrorMessage from '@/components/others/ErrorMessage';
 
+// VerifyActivation component
 const VerifyActivation: React.FC = () => {
     const searchParams = useSearchParams()
     const [activated, setActivated] = useState(false);   

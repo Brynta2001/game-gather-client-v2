@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-
+// The AccountActivated component is a presentational component that displays a message to the user
 const AccountActivated: React.FC = () => {
     return (
         <div className="flex flex-col items-center justify-center bg-white py-8">

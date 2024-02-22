@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+// VerificationEmailSent component displays a message to the user
 const VerificationEmailSent = () => {
     return (
         <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col items-center justify-center h-70">

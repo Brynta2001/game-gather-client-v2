@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+// GameCardProps is an interface for the props of the GameCard component.
 interface GameCardProps {
     id: string;
     title: string;
@@ -10,7 +10,7 @@ interface GameCardProps {
     platforms: string[];
     image: string;
 }
-
+//  GameCard component is used to display game details.
 const GameCard: React.FC<GameCardProps> = ({ id, title, publisher, releaseYear, genres, platforms, image }) => {
     return (
         <div className="flex items-center p-4 bg-white rounded-lg shadow-md">

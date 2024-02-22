@@ -1,3 +1,4 @@
+// Component for the Home page
 export default function Home() {
   return (
       <section className='w-full flex-center flex-col'>
@@ -5,7 +6,7 @@ export default function Home() {
         Discover & Review
         <br className='max-md:hidden' />
         <span className='orange_gradient text-center'> Game Gather</span>
-      </h1>
+      </h1>      
       <p className='desc text-center'>
         Game Gather is a platform to discover and review video games.
       </p>    

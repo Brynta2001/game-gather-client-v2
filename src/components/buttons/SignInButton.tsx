@@ -1,12 +1,13 @@
-"use client";
-
+'use client';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react'
 
+// Component for the sign-in button
 export const SignInButton = () => {
   const { data: session } = useSession();
 
+  // If user is signed in, display user information and sign out button
   if (session && session.user){
     return (
       <div className='flex gap-3 md:gap-5'>
@@ -16,6 +17,7 @@ export const SignInButton = () => {
       </div>
     )
   }else{
+    // If user is not signed in, display sign in button and sign up link
     return (
       <div className='flex gap-3 md:gap-5'>
         <button className='black_btn' onClick={ ()=>signIn('', {callbackUrl: '/dashboard'}) }>Sign In</button>
