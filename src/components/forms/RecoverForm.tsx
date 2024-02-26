@@ -32,7 +32,7 @@ const PasswordRecoveryForm: React.FC = () => {
             setButtonState(true);
             alert('Password recovery email sent, check your email!');            
         } catch (error) {
-            console.error(error);
+            //console.error(error);
         }
         
         };

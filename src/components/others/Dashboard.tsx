@@ -14,7 +14,7 @@ const Dashboard: React.FC = () => {
         const fetchGames = async () => {
             if (session && session.user.token) {
                 const token = session.user.token
-                console.log(`Bearer ${token}`)
+                
                 await axiosInstance.get('/games',{
                     headers: {
                         'accept': 'application/json', 
