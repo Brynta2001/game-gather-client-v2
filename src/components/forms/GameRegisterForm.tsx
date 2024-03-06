@@ -69,7 +69,7 @@ const GameRegisterForm: React.FC = () => {
                 onSubmit={handleSubmit}
             >
                 {({ values }) => (
-                    <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96">
+                    <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full">
                         <FormTitle title="Register Game" />
                         <ErrorMessage name="errorMessage" component="div" className="mb-4 text-red-500" />
                         <div className="mb-4">
