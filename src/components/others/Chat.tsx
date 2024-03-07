@@ -20,7 +20,7 @@ const connectToServer = (token: string) => {
 
 const addListeners = () => {
   const serverStatusLabel = document.getElementById('server-status')!
-  const clientsUl = document.getElementById('clients-ul')!
+  //const clientsUl = document.getElementById('clients-ul')!
   const messageForm = document.getElementById('message-form')!
   const messageInput = document.getElementById('message-input')! as HTMLInputElement
   const messagesUl = document.getElementById('messages-ul')!
@@ -38,7 +38,7 @@ const addListeners = () => {
     clients.forEach((clientId) => {
       clientsHtml += `<li>${clientId}</li>`
     })
-    clientsUl.innerHTML = clientsHtml
+    //clientsUl.innerHTML = clientsHtml
   })
 
   messageForm.addEventListener('submit', (event) => {
@@ -82,12 +82,13 @@ const Chat: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen w-full">
-      <h1 className="text-4xl font-bold mb-6 text-center">WebSocket Client</h1>
+      <h1 className="text-4xl font-bold mb-6 text-center">Chat room</h1>
+      <h3>Game Gather chat is the best chat room to make any friends online!</h3>
       {session?.user.token ? (
         <div className="flex flex-col items-center space-y-4">
           <span className="text-green-500">User is active</span>
           <span id="server-status">Offline</span>
-          <ul id="clients-ul"></ul>
+          
           <form id="message-form">
             <input
               type="text"
@@ -103,7 +104,7 @@ const Chat: React.FC = () => {
               Send
             </button>
           </form>
-          <h3>Messages</h3>
+          <h3 className='font-bold'>Message history</h3>
           <ul id="messages-ul" ref={messagesUlRef}></ul>
         </div>
       ) : (
