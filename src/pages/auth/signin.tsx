@@ -45,9 +45,6 @@ export default function SignIn({
                             Password
                         </label>
                         <input maxLength={50} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" name="password" type="password" />
-                        <Link href="/recover" >
-                        <p className="text-orange-700 hover:text-orange-900 text-center mb-6">Forgot password?</p>
-                        </Link>
                     
                     </div>
                     
