@@ -7,7 +7,7 @@ import { Manager, Socket } from 'socket.io-client'
 let socket: Socket
 
 const connectToServer = (token: string) => {
-  const manager = new Manager('http://localhost:3001/socket.io/socket.io.js', {
+  const manager = new Manager('https://chat-microservice.onrender.com/', {
     extraHeaders: {
       hola: 'mundo',
       authentication: token,
