@@ -1,15 +1,16 @@
 'use client'
-import React, { useState } from 'react';
+import React from 'react';
 import { Formik, Form, Field, ErrorMessage, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import FormTitle from '../others/FormTitle';
 import { useRouter } from 'next/navigation';
 import { axiosInstance } from '@/lib/axios-instance';
+import { useSession } from 'next-auth/react';
 import { AxiosResponse } from 'axios';
 
 const GameRegisterForm: React.FC = () => {
     const router = useRouter();
-    const [imageFile, setImageFile] = useState<File | null>(null);
+    const { data: session } = useSession();
 
     const initialValues = {
         title: '',
@@ -28,38 +29,48 @@ const GameRegisterForm: React.FC = () => {
         description: Yup.string().required('Description is required').max(1000, 'Description is too long'),
         genre: Yup.array().of(Yup.string().required('Genre is required')).min(1, 'At least one genre is required'),
         platforms: Yup.array().of(Yup.string().required('Platform is required')).min(1, 'At least one platform is required'),
-        image: Yup.mixed().required('Image is required'),
+        image: Yup.string().required('Image link is required').url('Please enter a valid image URL'),
     });
 
     const handleSubmit = async (gameData: any) => {
+
+        if (!session || !session.user.token) {
+
+            console.error('No active session or valid token');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('title', gameData.title);
         formData.append('publisher', gameData.publisher);
-        formData.append('releaseYear', gameData.releaseYear);
+        formData.append('releaseYear', gameData.releaseYear + 0);
         formData.append('description', gameData.description);
         formData.append('genre', JSON.stringify(gameData.genre));
         formData.append('platforms', JSON.stringify(gameData.platforms));
-        formData.append('image', imageFile!);
+        formData.append('image', gameData.image);
 
-        const response = await axiosInstance.post('/games', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        }).then((response: AxiosResponse) => {
+        console.log("Game data before sending to the server: ", gameData);
+
+        try {
+            const response: AxiosResponse = await axiosInstance.post('/games', gameData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.user.token}`
+                },
+            });
+
             if (response.status === 201) {
-                router.push('/success');
+                router.push('/game-success');
+            } else {
+                console.error('Error registering game', response.data);
+                alert('Error registering game');
             }
-        }).catch((error: any) => {
-            console.log(error);
+        } catch (error: any) {
+            console.error('Error registering game:', error.response.data);
             alert('Error registering game');
-        });
-    };
-
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files.length > 0) {
-            setImageFile(event.target.files[0]);
         }
     };
+
 
     return (
         <div className="flex justify-center items-center">
@@ -97,6 +108,19 @@ const GameRegisterForm: React.FC = () => {
                                 placeholder="Publisher"
                             />
                             <ErrorMessage name="publisher" component="div" className="text-red-500" />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+                                Release Year
+                            </label>
+                            <Field
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                id="releaseYear"
+                                type="number"
+                                name="releaseYear"
+                                placeholder="Release Year"
+                            />
+                            <ErrorMessage name="releaseYear" component="div" className="text-red-500" />
                         </div>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
@@ -188,12 +212,12 @@ const GameRegisterForm: React.FC = () => {
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
                                 Image
                             </label>
-                            <input
+                            <Field
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 id="image"
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageChange}
+                                type="text"
+                                name="image"
+                                placeholder="Insert image URL"
                             />
                             <ErrorMessage name="image" component="div" className="text-red-500" />
                         </div>
