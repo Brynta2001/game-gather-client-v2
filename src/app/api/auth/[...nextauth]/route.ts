@@ -23,7 +23,7 @@ const authOptions: NextAuthOptions = {
       // Authorize the user by sending a POST request to the login endpoint
       async authorize(credentials, req) {
 
-        const res = await axiosInstance.post("/auth/login", {
+        const res = await axiosInstance.post("/auth/signin", {
             email: credentials?.email,
             password: credentials?.password,
         }, 

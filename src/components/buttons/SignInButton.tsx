@@ -14,6 +14,7 @@ export const SignInButton = () => {
         <p>{session.user.fullName}</p>
         <Link href={'/dashboard'} className='black_btn'>Games</Link>
         <Link href={'/game-register'} className='black_btn'>Create Game</Link>
+        <Link href={'/chat'} className='black_btn'>Chat</Link>
         <button className='outline_btn' onClick={ () => signOut() }>Sign Out</button>
       </div>
     )
