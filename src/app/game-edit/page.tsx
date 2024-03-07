@@ -3,10 +3,18 @@ import GameEditForm from '@/components/forms/GameEditForm';
 
 // This component represents the game creation form.
 // It renders the GameRegisterForm component.
-const Page: React.FC = () => {
+
+interface PageProps {
+    params: {
+        gameId: string;
+    };
+
+}
+
+const Page: React.FC<PageProps> = ({ params }) => {
     return (
         <div>
-            <GameEditForm />
+            <GameEditForm gameId={params.gameId}/>
         </div>
     );
 };

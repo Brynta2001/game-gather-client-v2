@@ -18,7 +18,11 @@ interface GameData {
     image: string;
 }
 
-const GameEditForm: React.FC = () => {
+interface GameEditFormProps {
+    gameId: string;
+}
+
+const GameEditForm: React.FC<GameEditFormProps> = ({ gameId }) => {
     const router = useRouter();
     const { data: session } = useSession();
     const [gameData, setGameData] = useState<GameData | null>(null);
@@ -35,16 +39,14 @@ const GameEditForm: React.FC = () => {
 
     useEffect(() => {
         const fetchGameData = async () => {
-            if (session && session.user.token && router.query.id) {
-                const gameId = router.query.id;
-        
+            if (session && session.user.token && gameId) {
                 try {
                     const response = await axiosInstance.get(`/games/${gameId}`, {
                         headers: {
                             'Authorization': `Bearer ${session.user.token}`
                         }
                     });
-        
+
                     if (response.status === 200) {
                         setGameData(response.data);
                     } else {
@@ -58,8 +60,8 @@ const GameEditForm: React.FC = () => {
             }
         };
 
-        if (session?.user.token) fetchGameData();
-    }, [session, router.query.id]);
+        if (session?.user.token && gameId) fetchGameData();
+    }, [session, gameId]);
 
     const handleSubmit = async (gameData: GameData) => {
         if (!session || !session.user.token) {
@@ -67,27 +69,23 @@ const GameEditForm: React.FC = () => {
             return;
         }
 
-        const gameId = router.query.id; // Obtener el id del juego desde la URL
+        try {
+            const response: AxiosResponse = await axiosInstance.patch(`/games/${gameId}`, gameData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.user.token}`
+                },
+            });
 
-        if (typeof gameId === 'string') {
-            try {
-                const response: AxiosResponse = await axiosInstance.patch(`/games/${gameId}`, gameData, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${session.user.token}`
-                    },
-                });
-
-                if (response.status === 200) {
-                    router.push('/game-success');
-                } else {
-                    console.error('Error updating game', response.data);
-                    alert('Error updating game');
-                }
-            } catch (error: any) {
-                console.error('Error updating game:', error.response.data);
+            if (response.status === 200) {
+                router.push('/game-success');
+            } else {
+                console.error('Error updating game', response.data);
                 alert('Error updating game');
             }
+        } catch (error: any) {
+            console.error('Error updating game:', error.response.data);
+            alert('Error updating game');
         }
     };
 
