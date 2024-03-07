@@ -68,9 +68,15 @@ const GameEditForm: React.FC<GameEditFormProps> = ({ gameId }) => {
             console.error('No active session or valid token');
             return;
         }
+        // Copia del objeto gameData
+        const requestData = { ...gameData };
 
+        // Eliminar la propiedad 'id' del objeto copiado
+        delete requestData.id;
+        
+        console.log("Game data before sending to the server: ", requestData);
         try {
-            const response: AxiosResponse = await axiosInstance.patch(`/games/${gameId}`, gameData, {
+            const response: AxiosResponse = await axiosInstance.patch(`/games/${gameId}`, requestData, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session.user.token}`
@@ -251,7 +257,7 @@ const GameEditForm: React.FC<GameEditFormProps> = ({ gameId }) => {
                     )}
                 </Formik>
             ) : (
-                <div>Loading...</div>
+                <div>Loading game data...</div>
             )}
         </div>
     );
